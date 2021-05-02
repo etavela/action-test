@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: On Push
-      if: $IS_PUSH
+      if: ${{ github.event_name == 'push' }}
       run: |
         set -x
         echo Stream is $STREAM
@@ -29,7 +29,7 @@ jobs:
         STREAM: $COVERITY_PROJECT-${GITHUB_REF##*/}
 
     - name: On PR
-      if: $IS_PR
+      if: ${{ github.event_name == 'pull_request' }}
       run: |
         set -x
         echo Stream is $STREAM
