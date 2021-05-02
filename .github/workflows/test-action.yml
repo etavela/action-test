@@ -15,11 +15,27 @@ jobs:
 
     env:
       GITHUB_CONTEXT: ${{ toJSON(github) }}
+      COVERITY_PROJECT: test-action
+      IS_PR: ${{ github.event_name == 'pull_request' }}
+      IS_PUSH: ${{ github.event_name == 'push' }}
 
     steps:
-      - name: Print environment
-        run: |
-          set -x
-          export
+    - name: On Push
+      if: $IS_PUSH
+      echo: Stream is $STREAM
+      env:
+        STREAM: $COVERITY_PROJECT-${GITHUB_REF##*/}
+
+    - name: On PR
+      if: $IS_PR
+      echo: Stream is $STREAM
+      env:
+        STREAM: $COVERITY_PROJECT-$GITHUB_BASE_REF
+
+
+    - name: Print environment
+      run: |
+        set -x
+        export
 
 # Forcing build 2021-04-30 3:21 p.m.
