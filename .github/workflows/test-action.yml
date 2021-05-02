@@ -29,7 +29,7 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         set -x
-        STREAM=$(sed 's/\//-/g' <<< $COVERITY_PROJECT-$GITHUB_HEAD_REF)
+        STREAM=$(sed 's/\//-/g' <<< $COVERITY_PROJECT-$GITHUB_HEAD_REF)-pr-${{ event.number }}
         echo Stream is $STREAM
 
     - name: Print environment
