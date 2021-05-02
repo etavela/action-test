@@ -22,13 +22,17 @@ jobs:
     steps:
     - name: On Push
       if: $IS_PUSH
-      echo: Stream is $STREAM
+      run: |
+        set -x
+        echo Stream is $STREAM
       env:
         STREAM: $COVERITY_PROJECT-${GITHUB_REF##*/}
 
     - name: On PR
       if: $IS_PR
-      echo: Stream is $STREAM
+      run: |
+        set -x
+        echo Stream is $STREAM
       env:
         STREAM: $COVERITY_PROJECT-$GITHUB_BASE_REF
 
