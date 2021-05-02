@@ -26,7 +26,7 @@ jobs:
         echo Stream is $STREAM
 
     - name: On PR
-      if: ${{ github.event_name == 'pull_request' }}
+      if: ${{ github.event_name == 'pull_request' && (github.event.action == 'reopened' || github.event.action == 'synchronize')}}
       run: |
         set -x
         STREAM=$(sed 's/\//-/g' <<< $COVERITY_PROJECT-$GITHUB_HEAD_REF)-pr-${{ github.event.number }}
