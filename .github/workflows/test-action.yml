@@ -16,26 +16,21 @@ jobs:
     env:
       GITHUB_CONTEXT: ${{ toJSON(github) }}
       COVERITY_PROJECT: test-action
-      IS_PR: ${{ github.event_name == 'pull_request' }}
-      IS_PUSH: ${{ github.event_name == 'push' }}
 
     steps:
     - name: On Push
       if: ${{ github.event_name == 'push' }}
       run: |
         set -x
+        STREAM=$COVERITY_PROJECT-${GITHUB_REF##*/}
         echo Stream is $STREAM
-      env:
-        STREAM: $COVERITY_PROJECT-${GITHUB_REF##*/}
 
     - name: On PR
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         set -x
+        STREAM=$COVERITY_PROJECT-$GITHUB_HEAD_REF
         echo Stream is $STREAM
-      env:
-        STREAM: $COVERITY_PROJECT-$GITHUB_BASE_REF
-
 
     - name: Print environment
       run: |
