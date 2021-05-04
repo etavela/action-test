@@ -2,9 +2,10 @@ name: Test Action
 
 on:
   push:
-    branches: [  ]
+    branches: []
+    tags: []
   pull_request:
-    branches: [  ]
+    types: [opened, synchronize, reopened]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -15,9 +16,26 @@ jobs:
 
     env:
       GITHUB_CONTEXT: ${{ toJSON(github) }}
+      COVERITY_PROJECT: test-action
 
     steps:
-      - name: Print environment
-        run: |
-          set -x
-          export
+    - name: On Push
+      if: ${{ github.event_name == 'push' }}
+      run: |
+        set -x
+        STREAM=$COVERITY_PROJECT-${GITHUB_REF##*/}
+        echo Stream is $STREAM
+
+    - name: On PR
+      if: ${{ github.event_name == 'pull_request' && (github.event.action == 'reopened' || github.event.action == 'synchronize')}}
+      run: |
+        set -x
+        STREAM=$(sed 's/\//-/g' <<< $COVERITY_PROJECT-$GITHUB_HEAD_REF)-pr-${{ github.event.number }}
+        echo Stream is $STREAM
+
+    - name: Print environment
+      run: |
+        set -x
+        export
+
+# Forcing build 2021-5-2 5:48 p.m.
