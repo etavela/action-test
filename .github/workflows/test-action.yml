@@ -33,6 +33,13 @@ jobs:
         STREAM=$(sed 's/\//-/g' <<< $COVERITY_PROJECT-$GITHUB_HEAD_REF)-pr-${{ github.event.number }}
         echo Stream is $STREAM
 
+    - name: On tag
+      if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') }}
+      run: |
+        set -x
+        STREAM=$COVERITY_PROJECT-${GITHUB_REF##*/}
+        echo Stream is $STREAM
+
     - name: Print environment
       run: |
         set -x
